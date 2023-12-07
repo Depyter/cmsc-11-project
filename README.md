@@ -19,5 +19,5 @@ The banker rolls a pair of dice. 🎲🎲 Each of the players try to guess the s
 1. A player must stop playing if his/her money has dwindled down to PhP 100.00. 
 
 ### Finer details
-1.Checks must be made by the program. A player cannot bet an amount that cannot be covered by his current money. 
+1. Checks must be made by the program. A player cannot bet an amount that cannot be covered by his current money. 
 1. If the total sum of the bets from the players exceeds the capital of the banker the players must re-enter bets.
