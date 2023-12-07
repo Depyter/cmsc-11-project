@@ -163,7 +163,7 @@ int main() {
     struct player_data banker;
     
     // Initialize Money and player name
-    banker.money = 100000;
+    banker.money = 10000;
     player_one.money = 20000;
     strcpy(player_one.name, "Harley"); 
     player_two.money = 20000;
@@ -191,10 +191,8 @@ int main() {
         // Takes the bets of each player but checks player bet exceeds banker money.
         do {
             for (int i = 0; i < array_size; i++) {
-                if (!(data_array[i].money <= 100)) {
-                    get_bets(&data_array[i]);
-                    bet_sum += data_array[i].money;
-                }
+                get_bets(&data_array[i]);
+                bet_sum += data_array[i].bet;
             }
 
             if(!(bet_sum > banker.money)) {
@@ -229,13 +227,19 @@ int main() {
             printf("No one guessed it right.\n");
         }
 
-        printf("Money of each player and the banker is:\n");
-        printf("Banker:%i\n", banker.money);
+        if (banker.money <= 10000) {
+            printf("You have beat the banker.\nWell done.");
+            printf("The game will now terminate");
+            break;
+        } else {
+            printf("Money of each player and the banker is:\n");
+            printf("Banker:%i\n", banker.money);
+        }
+
         for (int i = 0; i < array_size; i++) {
             printf("%s's money is: %i.\n",data_array[i].name, data_array[i].money);
         }
         printLine();
-        
         int i = 0;
         while (i < array_size) {
             // Removes the player from the game if they have less than 100 money. 
@@ -260,7 +264,7 @@ int main() {
             case 'R': case 'r':
                 resetArray(data_array, reset_array, 3);
                 banker.money = 100000;
-                printf("Reseted the money");
+                printf("The money has been reset.");
                 continue;
                 
             case 'Q': case 'q':
