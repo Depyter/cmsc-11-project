@@ -109,7 +109,7 @@ void get_bets(struct player_data *p) {
             scanf(" %i", &bet);
 
             if (bet > p->money) {
-                printf("Invalid amount, Please bet again.\n");
+                printf("Invalid amount, Please bet again.\n You have %i in your account.\n", p->money);
             }
             else {
                 betting = 0;
@@ -140,6 +140,17 @@ void player_betting(int *banker, int *money_array[]) {
 
 }
 
+
+/* Apparently you can't remove an element from an array in c.
+So you have to create a custom function to create a new array*/
+// Pass the array, size of the array, and the element you want to remove. 
+void removeElement(struct player_data data_array[], int *size, int indexToRemove) {
+    for (int i = indexToRemove; i < *size - 1; i++) {
+        data_array[i] = data_array[i + 1];
+    }
+    (*size)--;
+}
+
 int main() {
 
     // Initalize the money for each player
@@ -155,6 +166,7 @@ int main() {
     struct player_data player_three;
     struct player_data banker;
     
+    banker.money = 100000;
 
     player_one.money = 20000;
     strcpy(player_one.name, "Harley");
@@ -167,13 +179,23 @@ int main() {
 
     struct player_data data_array[3] = {player_one, player_two, player_three};
 
+    int array_size = sizeof(data_array) / sizeof(data_array[0]);
+
     runGame = dialogue();
     while (runGame) {
-        for (int i = 0; i < 3; i++) {
-            get_guesses(&data_array[i]);
+        for (int i = 0; i < array_size; i++) {
+            if (data_array[i].money <= 100) {
+                printf("%s does not have enough money to play anymore.", data_array[i].name);
+                removeElement(data_array, &array_size, i);
+            } else {
+                get_guesses(&data_array[i]);
+            }
         }
-        for (int i = 0; i < 3; i++) {
-            get_bets(&data_array[i]);
+
+        for (int i = 0; i < array_size; i++) {
+            if (!(data_array[i].money <= 100)) {
+                get_bets(&data_array[i]);
+            }
         }
 
         int sum = sum_of_two_dice();
@@ -182,6 +204,12 @@ int main() {
             if (data_array[i].guess == sum) {
                 guessed++;
                 printf("Player %s guessed it right.\n", data_array[i].name);
+                banker.money -= data_array[i].bet;
+                printf("The banker has %i.\n", banker.money);
+            }
+            else {
+                banker.money += data_array[i].bet;
+                data_array[i].money -= data_array[i].bet;
             }
         }
 
