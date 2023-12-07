@@ -48,27 +48,26 @@ int dialogue() {
 
 void printLine() {
     int i;
-    for(i = 40; i > 0; i--) {
+    for(i = 20; i > 0; i--) {
         printf("*");
     }
     printf("\n");
 }
 
-//void prin_Border(height,width) {
-    //int i;
+/*void print_Border(height,width) {
+    int i;
 
     // Print the sides with text
-    //for (int i = 0; i < height; i++) {
-        //printf("* %-*s *\n", width, (i == height / 2)); // Center text in the middle row
-    //}
+    for (int i = 0; i < height; i++) {
+        printf("* %-*s *\n", width, (i == height / 2)); // Center text in the middle row
+    }
+}*/
 
-//}
-
-void printMoney() {
+/* void printMoney() {
     printLine();
-    //printBorder();
+    printBorder();
     printLine();
-}
+} */
 
 int sum_of_two_dice() {
     int i, n = 2, sum = 0, dice = 0;
@@ -79,7 +78,7 @@ int sum_of_two_dice() {
         printf("One of the dice is: %d\n", dice);
     }
 
-    printf("The sum is %i.\n", sum);
+    printf("The sum of the dice is %i.\n", sum);
 
     return sum;
 }
@@ -158,9 +157,9 @@ int main() {
     char playerInput;
 
     // Used to randomize the generated dice
-    time_t t1;
-    srand ((unsigned)time(&t1)); 
+    time_t t1; 
     
+    // Create a custom struct for each player
     struct player_data player_one;
     struct player_data player_two;
     struct player_data player_three;
@@ -172,10 +171,10 @@ int main() {
     strcpy(player_one.name, "Harley");
     
     player_two.money = 20000;
-    strcpy(player_two.name, "Mcdo");
+    strcpy(player_two.name, "Venice");
     
     player_three.money = 20000;
-    strcpy(player_three.name, "Jollibee");
+    strcpy(player_three.name, "AJ");
 
     struct player_data data_array[3] = {player_one, player_two, player_three};
 
@@ -183,6 +182,7 @@ int main() {
 
     runGame = dialogue();
     while (runGame) {
+        srand ((unsigned)time(&t1)); 
         for (int i = 0; i < array_size; i++) {
             if (data_array[i].money <= 100) {
                 printf("%s does not have enough money to play anymore.", data_array[i].name);
@@ -205,7 +205,10 @@ int main() {
                 guessed++;
                 printf("Player %s guessed it right.\n", data_array[i].name);
                 banker.money -= data_array[i].bet;
-                printf("The banker has %i.\n", banker.money);
+                data_array[i].money += data_array[i].bet;
+                printLine();
+                printf("The banker now has %i.\n", banker.money);
+                printLine();
             }
             else {
                 banker.money += data_array[i].bet;
@@ -216,13 +219,24 @@ int main() {
         if(!guessed) {
             printf("No one guessed it right.\n");
         }
+        printf("Money of each player and the banker is:\n");
+        printf("Banker:%i\n", banker.money);
+        for (int i = 0; i < array_size; i++) {
+            printf("%s's money is: %i.\n",data_array[i].name, data_array[i].money);
+        }
+        printLine();
 
-        printf("Should we continue?\nPress Y to continue or Q to quit.\n");
+        printf("Should we continue?\nPress Y to continue.\nPress R to restart each players money.\nQ to quit.\n");
         scanf(" %c", &playerInput);
         switch (playerInput)
         {     
         case 'Y': case 'y':
             continue;   
+        case 'R': case 'r':
+            for (int i = 0; i < 3; i++) {
+                data_array[i].money = 20000;
+            }
+            continue;
         case 'Q': case 'q':
             return 0;
 
