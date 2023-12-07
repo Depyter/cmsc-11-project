@@ -76,12 +76,13 @@ int sum_of_two_dice() {
 void get_guesses(struct player_data *p) {
     int guessing = 1, guess;
 
+    printf("Enter '0' if you dont want to guess this round.\n");
      do
         {
-        printf("Player %s try to guess the sum from 2 - 12.\n", p->name);
+        printf("Player %s, try to guess the sum of two dice from 2 - 12.\n", p->name);
         scanf(" %i", &guess);
 
-        if(guess >= 2 && guess <= 12) {
+        if((guess >= 2 && guess <= 12) || guess  == 0) {
             guessing = 0;
         }
         else {
@@ -163,13 +164,16 @@ int main() {
     struct player_data banker;
     
     // Initialize Money and player name
-    banker.money = 10000;
+    banker.money = 100000;
     player_one.money = 20000;
+    player_one.bet = 0;
     strcpy(player_one.name, "Harley"); 
     player_two.money = 20000;
-    strcpy(player_two.name, "Venice");
+    player_two.bet = 0;
+    strcpy(player_two.name, "Erik");
     player_three.money = 20000;
-    strcpy(player_three.name, "AJ");
+    player_three.bet = 0;
+    strcpy(player_three.name, "John");
 
     // Pass the custom structures to a struct array and have one has a reference array
     struct player_data data_array[3] = {player_one, player_two, player_three};
@@ -191,8 +195,10 @@ int main() {
         // Takes the bets of each player but checks player bet exceeds banker money.
         do {
             for (int i = 0; i < array_size; i++) {
-                get_bets(&data_array[i]);
-                bet_sum += data_array[i].bet;
+                if (data_array[i].guess != 0) {
+                    get_bets(&data_array[i]);
+                    bet_sum += data_array[i].bet;
+                }
             }
 
             if(!(bet_sum > banker.money)) {
@@ -207,12 +213,15 @@ int main() {
         int sum = sum_of_two_dice();
         printLine();
 
-        for (int i = 0; i < 3; i++) {
+        // Check you guessed it right or wrong and edit the money tracker accordingly
+        for (int i = 0; i < array_size; i++) {
             if (data_array[i].guess == sum) {
+
                 guessed++;
                 printf("Player %s guessed it right.\n", data_array[i].name);
                 banker.money -= data_array[i].bet;
                 data_array[i].money += data_array[i].bet;
+
                 printLine();
                 printf("The banker now has %i.\n", banker.money);
                 printLine();
@@ -235,7 +244,7 @@ int main() {
             return 0;
 
         } else {
-            printf("Money of each player and the banker is:\n");
+            printf("Money of each player and the banker is: \n");
             printf("Banker:%i\n", banker.money);
         }
 
@@ -278,7 +287,7 @@ int main() {
                 return 0;
             } 
         } 
-        // If one player is left, then ask the player if they want to quit or reset the game
+        // If one player is left, ask the player if they want to quit or reset the game
         else {
             printf("There is only one player left.\nPress R to restart the game.\nQ to quit.\n");
             
