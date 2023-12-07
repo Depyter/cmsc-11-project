@@ -227,10 +227,13 @@ int main() {
             printf("No one guessed it right.\n");
         }
 
+        // Terminate the game if the banker money is less than 10000
         if (banker.money <= 10000) {
-            printf("You have beat the banker.\nWell done.");
+            printf("You have beat the banker.\nWell done.\n");
+            printLine();
             printf("The game will now terminate");
-            break;
+            return 0;
+
         } else {
             printf("Money of each player and the banker is:\n");
             printf("Banker:%i\n", banker.money);
@@ -240,6 +243,7 @@ int main() {
             printf("%s's money is: %i.\n",data_array[i].name, data_array[i].money);
         }
         printLine();
+
         int i = 0;
         while (i < array_size) {
             // Removes the player from the game if they have less than 100 money. 
