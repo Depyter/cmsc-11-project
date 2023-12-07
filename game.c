@@ -76,7 +76,6 @@ int sum_of_two_dice() {
 void get_guesses(struct player_data *p) {
     int guessing = 1, guess;
 
-    printf("Enter '0' if you dont want to guess this round.\n");
      do
         {
         printf("Player %s, try to guess the sum of two dice from 2 - 12.\n", p->name);
@@ -188,6 +187,7 @@ int main() {
         srand ((unsigned)time(&t1)); 
 
         // Take each guess for each player
+        printf("Enter '0' if you dont want to guess this round.\n");
         for (int i = 0; i < array_size; i++) {
             get_guesses(&data_array[i]);
         }
@@ -221,10 +221,7 @@ int main() {
                 printf("Player %s guessed it right.\n", data_array[i].name);
                 banker.money -= data_array[i].bet;
                 data_array[i].money += data_array[i].bet;
-
-                printLine();
                 printf("The banker now has %i.\n", banker.money);
-                printLine();
             }
             else {
                 banker.money += data_array[i].bet;
@@ -235,7 +232,7 @@ int main() {
         if(!guessed) {
             printf("No one guessed it right.\n");
         }
-
+        printLine();
         // Terminate the game if the banker money is less than 10000
         if (banker.money <= 10000) {
             printf("You have beat the banker.\nWell done.\n");
@@ -251,7 +248,6 @@ int main() {
         for (int i = 0; i < array_size; i++) {
             printf("%s's money is: %i.\n",data_array[i].name, data_array[i].money);
         }
-        printLine();
 
         int i = 0;
         while (i < array_size) {
@@ -265,7 +261,7 @@ int main() {
             }
 
         }
-
+        printLine();
         if (array_size > 1) {
             printf("Should we continue?\nPress Y to continue.\nPress R to restart.\nQ to quit.\n");
             scanf(" %c", &playerInput);
