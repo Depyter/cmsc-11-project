@@ -110,26 +110,6 @@ void get_bets(struct player_data *p) {
         p->bet = bet;
 }
 
-// We pass pointers to the values to be able edit the original values
-void player_betting(int *banker, int *money_array[]) {
-
-    int bet_array[3] = {0,0,0}, sum;
-
-    // Loop until the players bet is equal to or less than the 
-    do {
-        sum = 0;
-        //get_bets(money_array, bet_array);
-        for(int i = 0; i < 3; i++) {
-            sum += bet_array[i];
-        }
-        if (sum > *banker) {
-            printf("The bets exceed the money of the banker.\n");
-        }
-    } while (sum > *banker);
-
-
-}
-
 /* Apparently you can't remove an element from an array in c.
 So you have to create a custom function to create a new array*/
 // Pass the array, size of the array, and the element you want to remove. 
