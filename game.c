@@ -23,7 +23,7 @@ If the total sum of the bets from the players exceeds the capital of the banker 
 struct player_data
 {
     int money;
-    char name[12];
+    char name[30];
     int guess;
     int bet;
 };
@@ -32,7 +32,7 @@ struct player_data
 int dialogue() {
     char playerInput;
     printf("Press Y to start or Q to quit.\n");
-    scanf("%c[\n]", &playerInput);
+    scanf(" %c[\n]", &playerInput);
     switch (playerInput)
     {
     case 'Y': case 'y':
@@ -99,7 +99,7 @@ void get_bets(struct player_data *p) {
             scanf(" %i", &bet);
 
             if (bet > p->money) {
-                printf("Invalid amount, Please bet again.\n You have %i in your account.\n", p->money);
+                printf("Invalid amount, Please bet again.\nYou have %i in your account.\n", p->money);
             }
             else {
                 betting = 0;
@@ -145,21 +145,42 @@ int main() {
     // Initialize Money and player name
     banker.money = 100000;
     player_one.money = 20000;
-    player_one.bet = 0;
-    strcpy(player_one.name, "Harley"); 
+    player_one.bet = 0; 
     player_two.money = 20000;
     player_two.bet = 0;
-    strcpy(player_two.name, "Erik");
     player_three.money = 20000;
     player_three.bet = 0;
-    strcpy(player_three.name, "John");
+
+    runGame = dialogue();
+
+    // Only ask for names if the player wants to play
+    if (runGame) {
+        for (int i = 0; i < 3; i++) {
+                char player_name[15];
+                printf("Input the name of the player:");
+                scanf(" %14[^\n]", player_name); 
+
+                // I got lazy and did a switch case when it should probably be another function the takes and inputs 
+                // each name into the scructure using a loop instead of a switch case which would involve pointers 
+                // and i kinda dont wanna deal with pointers anymore
+                switch (i) {
+                    case 0:
+                        strcpy(player_one.name, player_name); 
+                    case 1:
+                        strcpy(player_two.name, player_name);
+                    case 2:
+                        strcpy(player_three.name, player_name);
+                    default:
+                        break;
+                }
+         }
+    } 
 
     // Pass the custom structures to a struct array and have one has a reference array
     struct player_data data_array[3] = {player_one, player_two, player_three};
     struct player_data reset_array[3] = {player_one, player_two, player_three};
     int array_size = sizeof(data_array) / sizeof(data_array[0]);
 
-    runGame = dialogue();
     // Main loop where we run the game and call functions for guessing and betting
     while (runGame) {
 
@@ -253,7 +274,7 @@ int main() {
             case 'R': case 'r':
                 resetArray(data_array, reset_array, 3);
                 banker.money = 100000;
-                printf("The money has been reset.");
+                printf("The money has been reset.\n");
                 continue;
                 
             case 'Q': case 'q':
@@ -273,7 +294,7 @@ int main() {
             case 'R': case 'r':
                 resetArray(data_array, reset_array, 3);
                 banker.money = 100000;
-                printf("The money is reset.");
+                printf("The money is reset.\n");
                 continue;
                 
             case 'Q': case 'q':
